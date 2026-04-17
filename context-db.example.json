@@ -1,0 +1,27 @@
+{
+  "sessions": [
+    {
+      "date": "2026-04-16",
+      "branch": "main",
+      "worked_on": ["PROJ-42", "PROJ-43"],
+      "shipped": ["v1.2.0"],
+      "prs": ["#120"],
+      "decisions": [
+        "Bundled two related fixes into single PR instead of separate"
+      ],
+      "next": "Write changelog for v1.2.0"
+    }
+  ],
+  "estimates": [
+    {
+      "ticket": "PROJ-42",
+      "estimated": "2d",
+      "actual": "1d",
+      "note": "quick-win label was accurate"
+    }
+  ],
+  "patterns": [
+    "Frontend quick-wins tend to take half the estimate",
+    "Tooling/skill work tends to expand — timebox it"
+  ]
+}

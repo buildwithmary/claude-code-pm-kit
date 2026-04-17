@@ -1,0 +1,75 @@
+# CLAUDE.md — PM Kit Integration Example
+
+Add these sections to your project's CLAUDE.md to integrate the PM kit.
+
+---
+
+## Session Management
+
+### End Session Protocol
+
+When the user says "end session", you MUST:
+
+1. Create a pickup file at `.workspace-temp/session-pickup.md`:
+
+```markdown
+# Session Pickup - [DATE]
+
+## Current Task
+[1-2 sentence description]
+
+## Status
+- Branch: [branch-name]
+- Last action: [what was just completed]
+
+## Next Step
+[Single clear next action]
+```
+
+2. Append a session entry to `.workspace-temp/context-db.json`:
+
+```json
+{
+  "date": "YYYY-MM-DD",
+  "branch": "<branch worked on>",
+  "worked_on": ["KEY-XXX"],
+  "shipped": ["v1.0.0"],
+  "prs": ["#123"],
+  "decisions": ["Why we chose X over Y"],
+  "next": "What to do next session"
+}
+```
+
+### Context DB (`.workspace-temp/context-db.json`)
+
+A lightweight JSON file DB that persists across sessions.
+
+**At session end**, append a session entry (see above).
+**At session start**, read the context DB to understand recent history.
+
+**Rules:**
+- Keep last 30 sessions — prune older entries
+- Add to `estimates` array when a ticket is completed
+- Add to `patterns` array when you notice recurring themes
+- The `/standup` skill reads this file for its "Since Last Session" section
+
+### Context Efficiency
+
+- Use `.workspace-temp/session-pickup.md` instead of verbose summaries
+- At session start, read pickup file and context DB
+- Delete pickup file after reading to keep workspace clean
+
+---
+
+## Jira Integration (Atlassian MCP)
+
+All Jira operations use the Atlassian MCP tools. No manual API tokens needed.
+
+- **cloudId**: `<YOUR_SITE>.atlassian.net`
+- **Project Key**: `<KEY>`
+- **Content format**: Always use `contentFormat: "markdown"` and `responseContentFormat: "markdown"`
+
+### Label Conventions
+
+**Priority:** `p0-blocker`, `p1-critical`, `p2-high`, `p3-medium`
+**Type:** `quick-win`, `data-corruption-risk`, `silent-failure`, `technical-debt`, `polish`
